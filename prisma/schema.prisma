@@ -1,0 +1,91 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../generated/prisma"
+  runtime             = "nodejs"
+  moduleFormat        = "cjs"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum FinalEntry {
+  HOST
+  BIGFIVE
+  AUTOQUALIFIED
+  SEMI
+}
+
+enum Mode {
+  SEMI1
+  SEMI2
+  FINAL
+  ALL
+}
+
+model Contest {
+  id                Int          @id @default(autoincrement())
+  year              Int          @unique
+  city              String
+  participants      Participant[]
+  lobbies           Lobby[]
+}
+
+model Country {
+  id       Int      @id @default(autoincrement())
+  name     String   @unique @db.VarChar(50)
+  code     String   @unique @db.VarChar(3)
+  participants Participant[]
+}
+
+model Participant {    
+  id                        Int      @id @default(autoincrement())
+  artist                    String   @db.VarChar(100)
+  song                      String   @db.VarChar(100)
+  pointsFromAudienceSemi    Int?
+  pointsFromJurySemi        Int?
+  pointsFromAudienceFinal   Int?
+  pointsFromJuryFinal       Int?
+  semiNumber                Int?
+  semiPlacement             Int?
+  finalPlacement            Int?
+  finalEntry                FinalEntry
+  countryId                 Int
+  country                   Country     @relation(fields: [countryId], references: [id])
+  contestId                 Int
+  contest                   Contest     @relation(fields: [contestId], references: [id])
+  votes                     Vote[]
+
+  @@unique([contestId, countryId])
+}
+
+model Lobby {
+  id             Int      @id @default(autoincrement())
+  joinCode       String   @unique @db.VarChar(5)
+  mode           Mode?
+  votingEndsAt   DateTime?
+  contestId      Int?
+  contest        Contest?  @relation(fields: [contestId], references: [id])
+  players        Player[]
+}
+
+model Player {
+  id             Int      @id @default(autoincrement())
+  playerToken    String   @unique @db.VarChar(36)
+  hasConfirmed   Boolean  @default(false)
+  host           Boolean  @default(false)
+  lobbyId        Int
+  lobby          Lobby    @relation(fields: [lobbyId], references: [id], onDelete: Cascade) 
+  votes          Vote[]
+}
+
+model Vote {
+  points         Int
+  playerId       Int
+  player         Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  participantId  Int
+  participant    Participant @relation(fields: [participantId], references: [id])
+
+  @@id([playerId, participantId])
+}
