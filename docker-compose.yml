@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:17.11
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: evv_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - evv_data:/var/lib/postgresql/data
+
+volumes:
+  evv_data:
