@@ -22,4 +22,9 @@ export class VotingController {
   ) {
     return this.votingService.getResults(code, playerToken);
   }
+
+  @Get('participants')
+  getParticipants(@Param('code') code: string) {
+    return this.votingService.getParticipants(code);
+  }
 }

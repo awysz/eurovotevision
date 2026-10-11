@@ -205,6 +205,45 @@ export class VotingService {
       playerVotes,
     };
   }
+
+  async getParticipants(code: string) {
+    const lobby = await this.prisma.lobby.findUnique({
+      where: { joinCode: code },
+    });
+
+    if (!lobby) {
+      throw new NotFoundException('Lobby not found');
+    }
+    if (lobby.contestId === null) {
+      throw new BadRequestException('ContestId is wrong');
+    }
+    if (!lobby.mode) {
+      throw new ConflictException('Incorrect contest mode');
+    }
+
+    const official = officialFor(lobby.mode);
+    const participants = await this.prisma.participant.findMany({
+      where: {
+        contestId: lobby.contestId,
+        ...official.where,
+      },
+      select: {
+        id: true,
+        artist: true,
+        song: true,
+        country: { select: { name: true, code: true } },
+      },
+      orderBy: {
+        country: { name: 'asc' },
+      },
+    });
+
+    return participants.map(({ country, ...rest }) => ({
+      ...rest,
+      country: country.name,
+      countryCode: country.code,
+    }));
+  }
 }
 
 function officialFor(mode: Mode) {
