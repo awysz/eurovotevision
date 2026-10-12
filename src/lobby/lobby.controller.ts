@@ -8,8 +8,8 @@ import {
   Patch,
 } from '@nestjs/common';
 import { LobbyService } from './lobby.service';
-import { UpdateLobbyDto } from './dto/UpdateLobbyDto';
-import { StartLobbyDto } from './dto/StartLobbyDto';
+import { UpdateLobbyDto } from './dto/update-lobby.dto';
+import { StartLobbyDto } from './dto/start-lobby.dto';
 
 @Controller('lobbies')
 export class LobbyController {

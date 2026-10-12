@@ -6,7 +6,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SubmitVotesDto } from './dto/SubmitVotesDto';
+import { SubmitVotesDto } from './dto/submit-votes.dto';
 import { Mode, Participant } from '../../generated/prisma/client';
 
 const POINTS: number[] = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1];

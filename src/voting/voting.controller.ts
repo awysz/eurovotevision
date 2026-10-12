@@ -1,6 +1,6 @@
 import { Controller, Param, Post, Get, Body, Headers } from '@nestjs/common';
 import { VotingService } from './voting.service';
-import { SubmitVotesDto } from './dto/SubmitVotesDto';
+import { SubmitVotesDto } from './dto/submit-votes.dto';
 
 @Controller('lobbies/:code')
 export class VotingController {

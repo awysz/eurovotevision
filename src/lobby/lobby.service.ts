@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { randomInt, randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
-import { UpdateLobbyDto } from './dto/UpdateLobbyDto';
-import { StartLobbyDto } from './dto/StartLobbyDto';
+import { UpdateLobbyDto } from './dto/update-lobby.dto';
+import { StartLobbyDto } from './dto/start-lobby.dto';
 
 const maxPlayerCount: number = 6;
 const minPlayerCount: number = 2;
